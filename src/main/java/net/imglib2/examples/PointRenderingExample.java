@@ -86,48 +86,22 @@ public class PointRenderingExample< T extends RealType< T > >
 
 	public static void main( String[] args ) 
 	{
-		//PointRenderingExample< DoubleType > ex = initialize( args[ 0 ], args[ 1 ], args[ 2 ] );
-
 		PointRenderingExample< DoubleType > ex = initialize(
 				"resources/JRC2018F_small.tif",
 				"resources/JRC2018F_FAFB_small.h5",
 				"resources/fafb_synapses_small.csv");
 
 		// render
-		//ex.renderTest( 5.0, 10.0 );
+		ex.renderTest( 5.0, 10.0 );
 
-//		ex.bigRenderTest( 20.0, 10.0 );
-
-//		// run and visualize
+		// run and visualize
 //		ex.compareRenderMethods( 5.0, 10.0 );
 		
 //		ex.renderFAFB( 5.0, 10.0 );
 
 //		ex.compareRenderMethodsFAFB( 5.0, 10.0 );
 
-		ex.compareRenderMethodsEllipsoidBody( 0.8, 10.0 );
-	}
-
-	/**
-	 * Renders an image ({@link RealRandomAccessible}) from point coordinatesXZ
-	 * using a radially symmetric point spread function. Uses a {@link KDTree}
-	 * to efficiently find points near a query point.
-	 * 
-	 * @param radius
-	 *            the radius of the psf for each point
-	 * @param value
-	 *            the peak value for the psf
-	 */
-	public void bigRenderTest( final double radius, final double value )
-	{
-		KDTreeRenderer< T, RealPoint > renderer = new KDTreeRenderer<>( valueList, pointList, radius, value );
-		RealRandomAccessible< T > img = renderer.getRealRandomAccessible( radius, renderer::rbfRadius );
-
-		FinalInterval bigInterval = new FinalInterval( new long[]{ 30250, 9500, 391},
-				new long[]{35000, 13325, 735 });
-
-		// visualize
-		BdvStackSource< T > bdv = BdvFunctions.show( img, bigInterval, "Render points" );
+//		ex.compareRenderMethodsEllipsoidBody( 0.8, 10.0 );
 	}
 
 	
@@ -260,18 +234,18 @@ public class PointRenderingExample< T extends RealType< T > >
 
 
 		// transform the points
-//		List< RealPoint > transformedPoints = transformPoints( pointList, transform );
-//		// render the image from the transformed points
-//		KDTreeRenderer<T,RealPoint> renderer2 = new KDTreeRenderer<>( valueList, transformedPoints, radius, value );
-//		RealRandomAccessible< T > pointsTransformedImage = renderer2.getRealRandomAccessible( radius, renderer::rbfRadius );
-//		// visualize
-//		BdvFunctions.show( pointsTransformedImage, interval, "points -> transform -> render", opts );
-//
+		List< RealPoint > transformedPoints = transformPoints( pointList, transform.inverse() );
+		// render the image from the transformed points
+		KDTreeRenderer<T,RealPoint> renderer2 = new KDTreeRenderer<>( valueList, transformedPoints, radius, value );
+		RealRandomAccessible< T > pointsTransformedImage = renderer2.getRealRandomAccessible( radius, renderer::rbfRadius );
+		// visualize
+		BdvFunctions.show( pointsTransformedImage, interval, "points -> transform -> render", opts );
+
 		bdv.getBdvHandle().getSetupAssignments().getMinMaxGroups().get( 1 ).setRange( 0, 4000 );
 		bdv.getBdvHandle().getSetupAssignments().getConverterSetups().get( 1 ).setColor( GREEN );
 
-//		bdv.getBdvHandle().getSetupAssignments().getMinMaxGroups().get( 2 ).setRange( 0, 4000 );
-//		bdv.getBdvHandle().getSetupAssignments().getConverterSetups().get( 2 ).setColor( MAGENTA );
+		bdv.getBdvHandle().getSetupAssignments().getMinMaxGroups().get( 2 ).setRange( 0, 4000 );
+		bdv.getBdvHandle().getSetupAssignments().getConverterSetups().get( 2 ).setColor( MAGENTA );
 	}
 
 	/**
