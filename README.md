@@ -27,12 +27,11 @@ nor can they produce
 
 ### Continuous ("real") transformations
 
-Continuous transformations have continous valued inputs and outputs. 
-In math language, the point coordinates are Real numbers.  
-In computer-science language, the point coordinates are
-represented by floating-point (`float`/`double`) variables.
-Continuous transformations can accept any points as inputs or outputs
-(on or between the image grid).
+Continuous transformations have continous valued inputs and outputs.
+In math language, the point coordinates are Real numbers.
+In computer-science language, the point coordinates are represented by
+floating-point (`float`/`double`) variables. Continuous transformations
+can accept any points as inputs or outputs (on or between the image grid).
 
 The function:
 
@@ -48,10 +47,29 @@ is a discrete transformation that:
 2) Changes the roles of the i- and j-axes.
 
 
-# Example 1 - Discrete transforms in imglib2
+## Example 1 - Discrete and continuous transforms in imglib2
 
 This example shows how to:
 1) Apply a simple translation to an image and display it
 2) Apply a complicated discrete transformation to an image and show it
 3) Highlights some common pitfalls.
  
+
+## Example 2 - Composing transforms
+
+Composition transformation is just like composing functions - the input of one transformation is
+the output of another
+
+This example we will learn:
+1) That it is important to interpolate as little as possible.
+2) Why that is the case.
+3) That transformation composition is the solution.
+
+## Example 3 - Displacement ("deformation") fields
+Deformation fields are one of the most common representation of non-linear spatial transformations.
+
+This example we will learn:
+1) What a displacement field is.
+2) How to construct a deformation field and warp an image with it.
+3) How to numerically invert a displacement field.
+
