@@ -10,6 +10,10 @@ import net.imagej.display.ImageDisplay;
 import net.imagej.overlay.PointOverlay;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.RealLocalizable;
+import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.view.Views;
@@ -43,6 +47,15 @@ public class Helpers
 		return Views.hyperSlice( 
 				( RandomAccessibleInterval< UnsignedByteType > ) ij.io().open( "https://imagej.nih.gov/ij/images/boats.gif" ), 2, 0);
 		
+	}
+	
+	public static <T extends NativeType<T> & RealType<T>> RandomAccessibleInterval<T> copy( 
+			final RandomAccessibleInterval<T> img )
+	{
+		ArrayImgFactory<T> factory = new ArrayImgFactory<>(Views.flatIterable(img).firstElement().copy());
+		ArrayImg<T, ?> out = factory.create(img);
+		LoopBuilder.setImages( img, out ).forEachPixel((x,y) -> y.set(x));
+		return out;
 	}
 
 }
