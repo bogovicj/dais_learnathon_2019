@@ -1,6 +1,10 @@
 # dais_learnathon_2019
 ImageJ examples for the [2019 DAIS Learnathon](https://imagej.net/2019-06_-_DAIS_learnathon).
 
+## Sample data
+
+Sample data for the [Point rendering example](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java) can be downloaded [here](https://ndownloader.figshare.com/files/15516080?private_link=3780c3a7f7106d647104).  Extract the contents of the zip file into this repositories `resources` folder.
+
 # Overview
 
 These examples show how to apply spatial transformations 
