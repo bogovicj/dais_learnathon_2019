@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import net.imagej.ImageJ;
 import net.imglib2.Point;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.RealPoint;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
 import net.imglib2.realtransform.AffineTransform2D;
@@ -53,13 +52,16 @@ public class Ex02_ComposingTransforms
 
 		RandomAccessibleInterval< UnsignedByteType > boatsImage = example.helper.openBoats();
 
-		// build a more complex, continuous transformation
-		// and repeatedly apply it to the image
-//		example.repeatedRealTransform( boatsImage, example.smallRotation, 36 );
+		// repeatedly apply a transformation to the image with imglib2
+		example.repeatedRealTransform( boatsImage, example.smallRotation, 36 );
 
-		// build a more complex, continuous transformation
-		// and repeatedly apply it to the image
+		// repeatedly apply a transformation to the image, copying data each time
+		// ... what is different here...?
+		// why the blurring?
 		example.repeatedRealTransform2( boatsImage, example.smallRotation, 36 );
+
+		// compose the transformations
+		example.composeAffine( boatsImage, example.smallRotation, 36 );
 	}
 
 
@@ -91,6 +93,41 @@ public class Ex02_ComposingTransforms
 			imglist.add( transformedImage );
 
 			lastTransformedImage = transformedRealImage;
+		}
+
+		RandomAccessibleInterval<T> imgStack = Views.stack(imglist);
+		ij.ui().show(imgStack);
+
+	}
+
+	/**
+	 * Apply a continuous transformation - this let's us rotate and scale
+	 * the image by arbitrary amounts.
+	 *
+	 * Things are more complicated though, since now we need to interpolate between pixel values.
+	 * 
+	 * 
+	 */
+	public < T extends RealType< T > > void composeAffine( RandomAccessibleInterval< T > img,
+			final AffineTransform2D transform,
+			final int N)
+	{
+		ArrayList<RandomAccessibleInterval<T>> imglist = new ArrayList<>();
+		// add the untransformed image
+		imglist.add( img );
+		
+		AffineTransform2D currentTransform = new AffineTransform2D();
+
+		RealRandomAccessible< T > interpolatedImg = Views.interpolate( Views.extendZero( img ), new NLinearInterpolatorFactory< T >() );
+
+		for( int i = 0; i < N; i++ )
+		{
+			currentTransform = currentTransform.copy().preConcatenate( transform );
+			RealTransformRandomAccessible<T, ?> transformedRealImage = 
+					RealViews.affine( interpolatedImg, currentTransform );
+
+			IntervalView< T > transformedImage = Views.interval( Views.raster( transformedRealImage), img );
+			imglist.add( transformedImage );
 		}
 
 		RandomAccessibleInterval<T> imgStack = Views.stack(imglist);
