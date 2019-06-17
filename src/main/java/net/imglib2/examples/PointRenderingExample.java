@@ -26,16 +26,19 @@ import net.imglib2.RealPoint;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
+import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.realtransform.InvertibleRealTransform;
 import net.imglib2.realtransform.RealTransform;
 import net.imglib2.realtransform.RealTransformRandomAccessible;
 import net.imglib2.realtransform.RealViews;
+import net.imglib2.realtransform.Scale3D;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Util;
+import net.imglib2.view.Views;
 
 /**
  * In this example, we'll learn how to:
@@ -51,6 +54,10 @@ public class PointRenderingExample< T extends RealType< T > >
 	public static final ARGBType MAGENTA = new ARGBType( ARGBType.rgba( 255, 0, 255, 255 ) );
 
 	Img< UnsignedByteType > targetImage;
+
+	RealRandomAccessible< UnsignedByteType > targetPhysicalImage;
+
+	Interval physicalInterval;
 
 	AffineTransform3D affine;
 
@@ -211,7 +218,7 @@ public class PointRenderingExample< T extends RealType< T > >
 		BdvOptions opts = BdvOptions.options();
 		
 
-		BdvStackSource< UnsignedByteType > bdv = BdvFunctions.show( targetImage, "target", opts );
+		BdvStackSource< UnsignedByteType > bdv = BdvFunctions.show( targetPhysicalImage, physicalInterval, "target", opts );
 		opts = opts.addTo( bdv );
 
 		// render the image
@@ -276,6 +283,20 @@ public class PointRenderingExample< T extends RealType< T > >
 			final String pointsPath )
 	{
 		ImagePlus targetIp = IJ.openImage( targetImagePath );
+		Scale3D resolution = new Scale3D( 
+				targetIp.getCalibration().pixelWidth,
+				targetIp.getCalibration().pixelWidth,
+				targetIp.getCalibration().pixelDepth );
+		Img< UnsignedByteType > targetImg = ImageJFunctions.wrapByte( targetIp );
+		RealRandomAccessible< UnsignedByteType > targetPhys = RealViews.affine( Views.interpolate(
+						Views.extendZero( targetImg ),
+						new NLinearInterpolatorFactory<>()),
+					resolution);
+
+		FinalInterval physicalInterval = new FinalInterval(
+				(long)Math.round( resolution.getScale( 0 ) *  targetImg.dimension( 0 ) ),
+				(long)Math.round( resolution.getScale( 1 ) *  targetImg.dimension( 1 ) ),
+				(long)Math.round( resolution.getScale( 2 ) *  targetImg.dimension( 2 ) ));
 
 
 		AffineTransform3D affine = new AffineTransform3D();
@@ -298,8 +319,12 @@ public class PointRenderingExample< T extends RealType< T > >
 		PointRenderingExample< DoubleType > ex = new PointRenderingExample<>( new DoubleType() );
 
 		ex.smallInterval = new FinalInterval( 40, 30, 20 );
-		ex.targetImage = ImageJFunctions.wrapByte( targetIp );
+		ex.targetImage = targetImg; 
 		ex.interval = ex.targetImage;
+
+		ex.targetPhysicalImage = targetPhys;
+		ex.physicalInterval = physicalInterval;
+
 		ex.affine = affine;
 		ex.transform = transform;
 		ex.inversetransform = transform.inverse();
