@@ -26,11 +26,13 @@ import net.imglib2.RealPoint;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
+import net.imglib2.interpolation.randomaccess.ClampingNLinearInterpolatorFactory;
+
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.realtransform.InvertibleRealTransform;
 import net.imglib2.realtransform.RealTransform;
 import net.imglib2.realtransform.RealTransformRandomAccessible;
+import net.imglib2.realtransform.RealTransformSequence;
 import net.imglib2.realtransform.RealViews;
 import net.imglib2.realtransform.Scale3D;
 import net.imglib2.type.numeric.ARGBType;
@@ -65,9 +67,7 @@ public class PointRenderingExample< T extends RealType< T > >
 
 	Interval smallInterval;
 
-	RealTransform transform;
-
-	RealTransform inversetransform;
+	InvertibleRealTransform transform;
 
 	List< RealPoint > pointList;
 
@@ -94,12 +94,40 @@ public class PointRenderingExample< T extends RealType< T > >
 				"resources/fafb_synapses_small.csv");
 
 		// render
-//		ex.renderTest( 5.0, 10.0 );
+		//ex.renderTest( 5.0, 10.0 );
+
+//		ex.bigRenderTest( 20.0, 10.0 );
 
 //		// run and visualize
 //		ex.compareRenderMethods( 5.0, 10.0 );
+		
+//		ex.renderFAFB( 5.0, 10.0 );
 
-		ex.compareRenderMethodsFAFB( 5.0, 10.0 );
+//		ex.compareRenderMethodsFAFB( 5.0, 10.0 );
+
+		ex.compareRenderMethodsEllipsoidBody( 0.8, 10.0 );
+	}
+
+	/**
+	 * Renders an image ({@link RealRandomAccessible}) from point coordinatesXZ
+	 * using a radially symmetric point spread function. Uses a {@link KDTree}
+	 * to efficiently find points near a query point.
+	 * 
+	 * @param radius
+	 *            the radius of the psf for each point
+	 * @param value
+	 *            the peak value for the psf
+	 */
+	public void bigRenderTest( final double radius, final double value )
+	{
+		KDTreeRenderer< T, RealPoint > renderer = new KDTreeRenderer<>( valueList, pointList, radius, value );
+		RealRandomAccessible< T > img = renderer.getRealRandomAccessible( radius, renderer::rbfRadius );
+
+		FinalInterval bigInterval = new FinalInterval( new long[]{ 30250, 9500, 391},
+				new long[]{35000, 13325, 735 });
+
+		// visualize
+		BdvStackSource< T > bdv = BdvFunctions.show( img, bigInterval, "Render points" );
 	}
 
 	
@@ -230,8 +258,8 @@ public class PointRenderingExample< T extends RealType< T > >
 		// visualize
 		BdvFunctions.show( pointImageTransformed, interval, "points -> render -> transform", opts );
 
-//
-//		// transform the points
+
+		// transform the points
 //		List< RealPoint > transformedPoints = transformPoints( pointList, transform );
 //		// render the image from the transformed points
 //		KDTreeRenderer<T,RealPoint> renderer2 = new KDTreeRenderer<>( valueList, transformedPoints, radius, value );
@@ -244,6 +272,52 @@ public class PointRenderingExample< T extends RealType< T > >
 
 //		bdv.getBdvHandle().getSetupAssignments().getMinMaxGroups().get( 2 ).setRange( 0, 4000 );
 //		bdv.getBdvHandle().getSetupAssignments().getConverterSetups().get( 2 ).setColor( MAGENTA );
+	}
+
+	/**
+	 * 
+	 * @param radius
+	 *            the radius of the psf for each point
+	 * @param value
+	 *            the peak value for the psf
+	 */
+	public void compareRenderMethodsEllipsoidBody( double radius, double value )
+	{
+		BdvOptions opts = BdvOptions.options();
+
+		List< RealPoint > points;
+		try
+		{
+			// These synaptic clefts
+			points = loadPoints3dCsv( "resources/Ellipsoid_body_synaptic_clefts.csv" );
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+			return;
+		}
+		List< DoubleType > values = Stream.iterate( new DoubleType( 2 ), x -> x ).limit( points.size() ).collect( Collectors.toList() );
+
+		
+		// make the full transform
+		Scale3D toMicrons = new Scale3D( 0.016, 0.016, 0.04 );
+		RealTransformSequence fullTransform = new RealTransformSequence();
+		fullTransform.add( toMicrons );
+		fullTransform.add( transform.inverse() );
+
+		// transform the points
+		List< RealPoint > transformedPoints = transformPoints( points, fullTransform );
+		System.out.println( transformedPoints.get( 0 ));
+
+		// render the image from the transformed points
+		KDTreeRenderer<DoubleType,RealPoint> renderer = new KDTreeRenderer<>( values, transformedPoints, radius, value );
+		RealRandomAccessible< DoubleType > pointsTransformedImage = renderer.getRealRandomAccessible( radius, renderer::rbfRadius );
+
+		// visualize
+		BdvStackSource< UnsignedByteType > bdv = BdvFunctions.show( targetPhysicalImage, physicalInterval, "target", opts );
+		opts = opts.addTo( bdv );
+
+		BdvFunctions.show( pointsTransformedImage, interval, "Ellipsoid point synaptic cleft centers", opts );
 	}
 	
 	
@@ -290,7 +364,7 @@ public class PointRenderingExample< T extends RealType< T > >
 		Img< UnsignedByteType > targetImg = ImageJFunctions.wrapByte( targetIp );
 		RealRandomAccessible< UnsignedByteType > targetPhys = RealViews.affine( Views.interpolate(
 						Views.extendZero( targetImg ),
-						new NLinearInterpolatorFactory<>()),
+						new ClampingNLinearInterpolatorFactory<>()),
 					resolution);
 
 		FinalInterval physicalInterval = new FinalInterval(
@@ -327,7 +401,6 @@ public class PointRenderingExample< T extends RealType< T > >
 
 		ex.affine = affine;
 		ex.transform = transform;
-		ex.inversetransform = transform.inverse();
 		ex.randomPointsValues( 20, ex.smallInterval );
 
 		try
