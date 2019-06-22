@@ -1,9 +1,9 @@
-# dais_learnathon_2019
-ImageJ examples for the [2019 DAIS Learnathon](https://imagej.net/2019-06_-_DAIS_learnathon).
+# transforms_tutorial
+Imglib2 / ImageJ examples for the [2019 DAIS Learnathon](https://imagej.net/2019-06_-_DAIS_learnathon).
 
 ## Sample data
 
-Sample data for the [Point rendering example](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java) can be downloaded [here](https://ndownloader.figshare.com/files/15516080?private_link=3780c3a7f7106d647104).  Extract the contents of the zip file into this repositories `resources` folder.
+Sample data for the [Point rendering example](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java) can be downloaded [here](https://ndownloader.figshare.com/files/15516080?private_link=3780c3a7f7106d647104).  Extract the contents of the zip file into this repositories `resources` folder.
 
 # Overview
 
@@ -94,8 +94,8 @@ This example we will learn:
 * [Imglib2](https://imagej.net/ImgLib2) was the basis of everything here.
 * [imglib2-realtransform](https://github.com/imglib/imglib2-realtransform) was the api used for continous transformations
 * [Scijava](https://imagej.net/SciJava_Common) was used to 
-   * [Display images](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/net/imglib2/examples/Ex01_TranformPointsAndImages.java#L63)
-   * [Display images with point overlays](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/net/imglib2/examples/Helpers.java#L25-L31)
+   * [Display images](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/Ex01_TranformPointsAndImages.java#L63)
+   * [Display images with point overlays](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/Helpers.java#L25-L31)
 * The [N5](https://github.com/saalfeldlab/n5) api is used to:
-   * [store point coordinates in this example](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/org/janelia/saalfeldlab/n5examples/PointsToN5.java), and to 
-   * [load a displacement field and affine transform in this example](https://github.com/bogovicj/dais_learnathon_2019/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java)
+   * [store point coordinates in this example](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/org/janelia/saalfeldlab/n5examples/PointsToN5.java), and to 
+   * [load a displacement field and affine transform in this example](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java)
