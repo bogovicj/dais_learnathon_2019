@@ -58,7 +58,9 @@ This example shows how to:
 ## Example 2 - Composing transforms
 
 Composition transformation is just like composing functions - the input of one transformation is
-the output of another
+the output of another.
+
+See [this Robert Haase tweet](https://twitter.com/haesleinhuepf/status/1088546103866388481) and the related discussion.
 
 This example we will learn:
 1) That it is important to interpolate as little as possible.
