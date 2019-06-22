@@ -75,6 +75,20 @@ This example we will learn:
 2) How to construct a deformation field and warp an image with it.
 3) How to numerically invert a displacement field.
 
+# Tips for a joyful transformation experience
+
+* **Save your transforms to disk** when transforming images.
+   * It's *more important* to save the transforms, than to save the images(!)
+* Use and respect the image metadata
+    * Set pixel spacing and origin in physical units
+* Define transforms in physical units (nm, um, mm, au, whatever) not pixels.
+   * This makes your life super easy when dealing with images of the same thing taken at different resolutions
+   and/or with slightly different fields of view.  
+* Respect your origin
+   * Pick it, and stick with it.
+   * Don't define rotations about the center because it's convenient (now), it will cause pain (later).
+
+
 # Related topics in these examples
 
 * [Imglib2](https://imagej.net/ImgLib2) was the basis of everything here.
