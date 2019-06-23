@@ -53,7 +53,9 @@ This example shows how to:
 1) Apply a simple translation to an image and display it
 2) Apply a complicated discrete transformation to an image and show it
 3) Highlights some common pitfalls.
- 
+
+Exercise:
+Use what we learned in these examples to resample an image (preserving the field of view).
 
 ## Example 2 - Composing transforms
 
@@ -74,6 +76,7 @@ This example we will learn:
 1) What a displacement field is.
 2) How to construct a deformation field and warp an image with it.
 3) How to numerically invert a displacement field.
+4) Adding deformation fields is not the same as composing them.
 
 # Tips for a joyful transformation experience
 
