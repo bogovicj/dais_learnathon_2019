@@ -78,6 +78,15 @@ This example we will learn:
 3) How to numerically invert a displacement field.
 4) Adding deformation fields is not the same as composing them.
 
+## Point rendering example
+
+This example reiterates some of the topics we've learned about in other examples with a more realistic example.
+Before starting, make sure you've downloaded [this sample data](https://ndownloader.figshare.com/files/15516080?private_link=3780c3a7f7106d647104) 
+and extracted the contents of the zip file into this repositories `resources` folder.
+
+The light image data comes from [An unbiased template of the Drosophila brain and ventral nerve cord](https://doi.org/10.1101/376384).  The EM image data come from the [Complete Electron Microscopy Volume of the Brainof Adult Drosophila melanogaster ("FAFB")](https://doi.org/10.1016/j.cell.2018.06.019) image data [available here](https://www.temca2data.org/), and the synapse predictions from those data are from [Synaptic Cleft Segmentation in Non-Isotropic Volume Electron Microscopy of the Complete Drosophila Brain](https://arxiv.org/abs/1805.02718)
+
+
 # Tips for a joyful transformation experience
 
 * **Save your transforms to disk** when transforming images.
@@ -94,11 +103,12 @@ This example we will learn:
 
 # Related topics in these examples
 
-* [Imglib2](https://imagej.net/ImgLib2) was the basis of everything here.
-* [imglib2-realtransform](https://github.com/imglib/imglib2-realtransform) was the api used for continous transformations
-* [Scijava](https://imagej.net/SciJava_Common) was used to 
+* [Imglib2](https://imagej.net/ImgLib2) is the basis of everything here.
+* [imglib2-realtransform](https://github.com/imglib/imglib2-realtransform) is the api used for continous transformations
+* [Scijava](https://imagej.net/SciJava_Common) is used to 
    * [Display images](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/Ex01_TranformPointsAndImages.java#L63)
    * [Display images with point overlays](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/Helpers.java#L25-L31)
+* [BigDataViewer](https://imagej.net/BigDataViewer) is used for visualization in the [PointsRenderingExample](https://github.com/bogovicj/transforms_tutorial/blob/1d7c929b988d4f61a7d9e80040cd543397f3db36/src/main/java/net/imglib2/examples/PointRenderingExample.java#L124)
 * The [N5](https://github.com/saalfeldlab/n5) api is used to:
    * [store point coordinates in this example](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/org/janelia/saalfeldlab/n5examples/PointsToN5.java), and to 
    * [load a displacement field and affine transform in this example](https://github.com/bogovicj/transforms_tutorial/blob/master/src/main/java/net/imglib2/examples/PointRenderingExample.java)
