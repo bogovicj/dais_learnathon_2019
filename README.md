@@ -1,5 +1,5 @@
 # transforms_tutorial
-Imglib2 / ImageJ examples for the [2019 DAIS Learnathon](https://imagej.net/2019-06_-_DAIS_learnathon).
+Imglib2 / ImageJ examples for the [2019 DAIS Learnathon](https://imagej.net/2019-06_-_DAIS_learnathon).  See also the [2019 learnathon github repo](https://github.com/fiji/learnathon-2019)
 
 ## Sample data
 
