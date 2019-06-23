@@ -84,6 +84,15 @@ This example reiterates some of the topics we've learned about in other examples
 Before starting, make sure you've downloaded [this sample data](https://ndownloader.figshare.com/files/15516080?private_link=3780c3a7f7106d647104) 
 and extracted the contents of the zip file into this repositories `resources` folder.
 
+This example shows us how to:
+1) Efficiently render point coordinates a "blob image"
+2) Observe the differences between the images produced if one:
+   * transforms points then renders
+   * renders the image, then transforms it
+3) Apply a real, deformable transformation between EM and a light-level template to point coordinates derived by predicting synapse locations from EM.
+   * over the whole brain
+   * over a subset of the brain
+
 The light image data comes from [An unbiased template of the Drosophila brain and ventral nerve cord](https://doi.org/10.1101/376384).  The EM image data come from the [Complete Electron Microscopy Volume of the Brainof Adult Drosophila melanogaster ("FAFB")](https://doi.org/10.1016/j.cell.2018.06.019) image data [available here](https://www.temca2data.org/), and the synapse predictions from those data are from [Synaptic Cleft Segmentation in Non-Isotropic Volume Electron Microscopy of the Complete Drosophila Brain](https://arxiv.org/abs/1805.02718)
 
 
