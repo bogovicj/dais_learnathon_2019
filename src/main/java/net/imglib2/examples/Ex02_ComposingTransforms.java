@@ -52,18 +52,24 @@ public class Ex02_ComposingTransforms
 
 		RandomAccessibleInterval< UnsignedByteType > boatsImage = example.helper.openBoats();
 
-		// repeatedly apply a transformation to the image with imglib2
+		/*
+		 * repeatedly apply a transformation to the image with imglib2
+		 */
 		example.repeatedRealTransform( boatsImage, example.smallRotation, 36 );
 
-		// repeatedly apply a transformation to the image, copying data each time
-		// ... what is different here...?
-		// why the blurring?
-		example.repeatedRealTransform2( boatsImage, example.smallRotation, 36 );
+		/*
+		 * repeatedly apply a transformation to the image, copying data each time
+		 * ... what is different here...?
+		 * why the blurring?
+		 * and why does the first example not blur the image?
+		 */
+		example.repeatedRealTransformAndCopy( boatsImage, example.smallRotation, 36 );
 
-		// compose the transformations
+		/*
+		 *  compose the transformations
+		 */
 		example.composeAffine( boatsImage, example.smallRotation, 36 );
 	}
-
 
 	/**
 	 * Apply a continuous transformation - this let's us rotate and scale
@@ -141,7 +147,7 @@ public class Ex02_ComposingTransforms
 	 * @param transform the transformation
 	 * @param N number of times to apply the tranform
 	 */
-	public <T extends RealType<T> & NativeType<T>> void repeatedRealTransform2(RandomAccessibleInterval<T> img,
+	public <T extends RealType<T> & NativeType<T>> void repeatedRealTransformAndCopy(RandomAccessibleInterval<T> img,
 			final InvertibleRealTransform transform,
 			final int N)
 	{
