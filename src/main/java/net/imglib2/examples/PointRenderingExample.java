@@ -91,20 +91,41 @@ public class PointRenderingExample< T extends RealType< T > >
 				"resources/JRC2018F_FAFB_small.h5",
 				"resources/fafb_synapses_small.csv");
 
-		// render
+		/*
+		 * A small example of rendering point locations as an image 
+		 */
 		ex.renderTest( 5.0, 10.0 );
 
-		// run and visualize
+		/*
+		 * A small example showing the difference between 
+		 * transforming points then rendering an image vs
+		 * rendering an image then transforming it
+		 */
 //		ex.compareRenderMethods( 5.0, 10.0 );
 		
+		/*
+		 * A large, realistic example of rendering point locations as an image 
+		 */
 //		ex.renderFAFB( 5.0, 10.0 );
 
+		/*
+		 * A large example showing the difference between 
+		 * transforming points then rendering an image vs
+		 * rendering an image then transforming it
+		 * 
+		 * This transformation is a real, deformable transformation between
+		 * the FAFB brain and the JRC2018 template brain
+		 */
 //		ex.compareRenderMethodsFAFB( 5.0, 10.0 );
 
+		/*
+		 * Similar to the above, but using a more densely sampled set
+		 * of points in one particular region of the brain, 
+		 * the "ellipsoid body"
+		 */
 //		ex.compareRenderMethodsEllipsoidBody( 0.8, 10.0 );
 	}
 
-	
 	/**
 	 * Renders an image ({@link RealRandomAccessible}) from point coordinatesXZ
 	 * using a radially symmetric point spread function. Uses a {@link KDTree}
